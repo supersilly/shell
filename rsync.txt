@@ -1,0 +1,25 @@
+route -p add 61.149.176.242  mask 255.255.255.255 172.31.200.39
+
+rsync -auzvP --delete -e "ssh -p22" root@192.168.0.221:/var/tongbu/ /var/tongbu/ --port 873
+rsync -auzvP --delete -e "ssh -p22" /var/tongbu/ root@192.168.0.221:/var/tongbu/ --port 873
+
+rsync -auzvP --delete -e "ssh -p2188" root@192.168.0.221:/var/tongbu/ /home/boss/data/ --port 873
+rsync -avzP  --delete -e "ssh -p2188" boss@192.168.23.104/home/boss/data /home/boss/data
+
+
+ln -s /home/boss/data/userfiles /home/boss/tm_server/webapps/lebao/userfiles
+
+
+
+rsync -vzrtopg --delete --progress -e "ssh -p2188" 111.txt boss@192.168.23.104::backup --password-file=/etc/.rsyncd.secrets
+
+rsync -avzP --partial --progress -e "ssh -p2188" /home/boss/data/* boss@192.168.23.104:/home/boss/data
+rsync --delete -e "ssh p2188" /home/boss/data/* -avSH boss@192.168.23.104:/home/boss/data
+
+
+rsync -avH --port=873 --progress --delete  /home/boss/data boss@192.168.23.104::data --password-file=cat /etc/.rsyncd.secrets
+
+rsync -avz test.txt boss@192.168.23.105::backup
+
+
+rsync -avzP  --delete /home/boss/tm_server/webapps/lebao/userfiles/* /home/boss/tm_server/appbak/bak

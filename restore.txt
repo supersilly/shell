@@ -1,0 +1,45 @@
+#!/bin/bash
+
+c_date=$(date +%m%d)
+tomcat="/usr/local/tomcat_WX/"
+bak_dir=${tomcat}"appbak/bak/"
+pro_dir=${tomcat}"webapps/"
+bak_image=${bak_dir}"tempImages"
+pro_image=${pro_dir}"lebao/userfiles/tempImages"
+bak="${bak_dir}${1}"
+pro=${pro_dir}"lebao"
+new_bak=${bak_dir}"lebao"${c_date}
+
+#if the user is not boss,exit
+echo "check whether the user is boss"
+USER_NOW=$(whoami)
+if [ ${USER_NOW} = "boss" ]; then
+  echo "You are boss."
+else
+  echo "To execute this shell,you must be boss!"
+  exit 0
+fi
+
+echo "check the status of tomcat"
+if [ $(ps -ef | grep java | grep tomcat | grep -v grep | wc -l) -nq '0' ]; then
+    echo "Tomcat is still running,please kill it!"
+    exit 0
+fi
+
+echo "check whether the param is right!"
+if [ $# -eq 1 ]; then
+  if [ ! -d ${bak} ]; then
+    echo "The dir ${bak} is not exist!exit"
+	exit 1
+  fi
+  mv ${pro} ${new_bak}
+  mv ${bak} ${pro}
+  cp -rf ${bak_image} ${pro_image}
+  
+else
+  echo "Your must have a param!"
+  echo "usage:"
+  echo "$0 [ filename ]"
+  exit 1
+fi
+

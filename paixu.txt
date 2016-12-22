@@ -1,0 +1,26 @@
+#!/bin/bash
+num=(11 25 34 13 42 55 66)
+num_len=${#num[*]}
+echo "num_len is $num_len"
+let "num_l=$num_len-1"
+echo "num_l is $num_l"
+for((i="$num_l";i>=0;i--))
+  {
+    key=0
+    echo "i is $i"
+    echo "this key is $key"
+    for((j=0;j<="$i";j++))
+      {
+        echo "j is $j"
+        echo "this num is ${num[$j]}"
+		echo "and  key_num is ${num[$key]}"
+        if [ ${num[$j]} -gt ${num[$key]} ]; then
+          key=$j
+        fi
+      }
+    temp=${num[$i]}
+    num[$i]=${num[$key]}
+    num[$key]=$temp
+    echo ${num[$i]}
+  }
+echo "the num is "${num[*]}

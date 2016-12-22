@@ -1,0 +1,66 @@
+#!/bin/bash
+tomcat_dir="/home/boss/tomcat"
+start_sh=${tomcat_dir}"/bin/startup.sh"
+stop_sh=${tomcat_dir}"/bin/shutdown.sh"
+function start_tm {
+  if [ $(ps -ef | grep tomcat | grep -v grep | wc -l) -eq '0' ]; then
+    $start_sh
+  else
+    echo "The tomcat is already started!"
+    exit 0
+  fi
+}
+
+function stop_tm {
+  if [ $(ps -ef | grep tomcat | grep -v grep | wc -l) -eq '1' ]; then
+    $stop_sh
+  else
+    echo "The tomcat is not running!"
+    exit 0
+  fi
+  sleep 2
+  if [ $(ps -ef | grep tomcat | grep -v grep | wc -l) -eq '0' ]; then
+    echo "Shutdown the tomcat successfully!"
+  else  
+    echo "Find tomcat is still running,kill it!"
+    ps -ef | grep tomcat | grep -v grep | awk '{print $2}' | xargs kill -9
+  fi
+}
+
+function restart_tm {
+  echo "Begin to restart tomcat!"
+  ps -ef | grep tomcat | grep -v grep | awk '{print $2}' | xargs kill -9
+  $start_sh
+}
+
+function status_tm {
+  echo "The follows:"
+  if [ $(ps -ef | grep tomcat | grep -v grep | wc -l) -eq '0' ]; then
+    echo "Tomcat is not running!"
+    exit 0
+  else
+    ps -ef | grep tomcat | grep -v grep
+  fi
+}
+
+if [ $# -eq 0 ]; then
+  status_tm
+elif [ $# = 1 -a $1 = "start" ]; then
+  echo "Begin to start the tomcat ..."
+  start_tm
+elif [ $# = 1 -a $1 = "stop" ]; then
+  echo "Begin to shutdown the tomcat ..."
+  stop_tm
+elif [ $# = 1 -a $1 = "restart" ]; then
+  echo "Begin to restart the tomcat ..."
+  restart_tm
+elif [ $# = 1 -a $1 = "status" ]; then
+  status_tm
+else
+  echo "Your param is wrong!"
+  echo "usage:"
+  echo "$0 [ start | stop | restart | status ]"
+  echo "The default param:status"
+  exit 1
+fi
+echo "Finished!"

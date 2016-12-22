@@ -1,0 +1,68 @@
+#!/bin/bash
+
+svn="/home/svn/"
+#if the user is not svn,exit
+echo "check whether the user is svn"
+USER_NOW=$(whoami)
+if [ ${USER_NOW}=svn ] ;then
+  echo "You are svn."
+else
+  echo "To execute this shell,you must be svn!"
+  exit 0
+fi
+
+function start_svn {
+  if [ $(ps -ef | grep svnserve | grep -v grep | wc -l) -eq '0' ]; then
+    svnserve -d -r /home/svn
+  else
+    echo "The tomcat is already started!"
+    exit 0
+  fi
+}
+
+function stop_svn {
+  if [ $(ps -ef | grep svnserve | grep -v grep | wc -l) -eq '1' ]; then
+    ps -ef | grep svnserve | grep -v grep | awk '{print $2}' | xargs kill -9
+  else
+    echo "The svn is not normal running!"
+    exit 0
+  fi
+}
+
+function restart_svn {
+  echo "Begin to restart tomcat!"
+  start_svn
+  stop_svn
+}
+
+function status_svn {
+  echo "The follows:"
+  if [ $(ps -ef | grep svnserve | grep -v grep | wc -l) -eq '0' ]; then
+    echo "Tomcat is not normal running!"
+    exit 0
+  else
+    ps -ef | grep svnserver | grep -v grep
+  fi
+}
+
+if [ $# -eq 0 ]; then
+  status_tm
+elif [ $# = 1 -a $1 = "start" ]; then
+  echo "Begin to start the tomcat ..."
+  start_svn
+elif [ $# = 1 -a $1 = "stop" ]; then
+  echo "Begin to shutdown the tomcat ..."
+  stop_svn
+elif [ $# = 1 -a $1 = "restart" ]; then
+  echo "Begin to restart the tomcat ..."
+  restart_svn
+elif [ $# = 1 -a $1 = "status" ]; then
+  status_svn
+else
+  echo "Your param is wrong!"
+  echo "usage:"
+  echo "$0 [ start | stop | restart | status ]"
+  echo "The default param:status"
+  exit 1
+fi
+echo "Finished!"
