@@ -29,9 +29,8 @@ if [ $? -eq '0' ]; then
   if [ -f net_error ]; then
     echo $da"The status of Lebao network is OK!"
     mail -s 'Dear TangYangyang:Network of Lebao is OK!' tangyangyang@100baojia.com < ${text}
-	mail -s 'Dear TangYangyang:Network of Lebao is OK!' tangyangyang@100baojia.com < ${text}
-	rm -rf net_error
-	rm -rf ${text}
+    rm -rf net_error
+    rm -rf ${text}
   fi
   exit 0
 else
