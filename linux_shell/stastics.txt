@@ -1,0 +1,26 @@
+#!/bin/bash
+cat test.log | grep -v key | awk '{print $4}' > key.tmp
+sort key.tmp | uniq >key.txt
+arr=($(cat key.txt))
+#echo ${arr[*]}
+arr_len=${#arr[@]}
+for ((i=0;i<$arr_len;i++))
+do
+#  echo "this key is "${arr[$i]}
+  cat test.log | eval grep ${arr[$i] } | awk '{print $5}' > sum.tmp
+  ars=($(cat sum.tmp))
+#  echo ${ars[*]}
+  ars_len=${#ars[@]}
+  sum=0
+  for j in ${ars[*]}
+    do
+#      echo "value is "$j
+      ((sum=$sum+$j))
+    done
+#  echo "the result is "${arr[$i]}" "$sum
+  aver=$(echo $sum $ars_len | awk '{print $1/$2}')
+  echo ${arr[$i]} $aver
+done
+rm key.tmp
+rm key.txt
+rm sum.tmp

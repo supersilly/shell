@@ -1,0 +1,18 @@
+#!/bin/bash
+money_sum=100
+gj_p=5
+mj_p=3
+let "gj_mount=$money_sum/$gj_p"
+for((gj=1;gj<$gj_mount;gj++))
+  {
+    let "money_gj_left=$money_sum-$gj_p*$gj"
+    let "mj_mount=$money_gj_left/$mj_p"
+    for((mj=1;mj<=$mj_mount;mj++))
+      {	    
+        let "money_mj_left=$money_gj_left-$mj_p*$mj"
+        let "xj=3*$money_mj_left"
+        if [ $xj -ne 0 ]; then
+          echo "GJ: $gj; MJ: $mj; XJ: $xj "
+        fi
+      }
+  }

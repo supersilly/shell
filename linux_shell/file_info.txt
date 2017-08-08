@@ -1,0 +1,28 @@
+#!/bin/bash
+if [ $# -ne 1 ]; then
+  echo "You must refer to a dir!"
+  exit 1
+fi
+if [ ! -d $1 ]; then
+  echo "Cannot find the dir ${1}!please check it..."
+  exit 1
+fi
+
+dir=$1
+file_sum=$(ls -l ${dir} | grep ^- | wc -l)
+dir_sum=$(ls -l ${dir} | grep ^d | wc -l)
+type_sum=$(ls ${dir} | sed 's/\(.*\)\.\(.*\)/\2/g' | sort | uniq -c )
+dir_size=$(du -sh $1)
+
+echo "In the dir "${dir}":"
+echo ""
+echo "The sum of file is:"${file_sum}
+echo ""
+echo "The sum of dir is: "${dir_sum}
+echo ""
+echo "Type of files sum is: "
+echo ""
+printf "%7s %-s \n" times type
+echo "$type_sum"
+echo ""
+echo "The size of the dir is: "${dir_size}

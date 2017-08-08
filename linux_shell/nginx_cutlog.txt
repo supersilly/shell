@@ -1,0 +1,66 @@
+#!/bin/bash
+cut_log="/usr/local/nginx/cut_log.log"
+m_date=$(date +%Y%m%d_%H%M)
+dir_log="/usr/local/nginx/logs"
+pid=$(cat /usr/local/nginx/logs/nginx.pid)
+#cron is {* */6 * * * /usr/local/nginx/log_cut.sh}
+zip_imcang()
+{
+  da=$(date '+%Y-%m-%d %H:%M:%S')
+  echo "${da} begin to zip imicang.100baojia.com.log">>$cut_log
+  zip "${dir_log}/imicang_${m_date}.zip" "${dir_log}/imicang.100baojia.com.log"
+  da=$(date '+%Y-%m-%d %H:%M:%S')
+  echo "${da} zip imicang.100baojia.com.log over!">>$cut_log
+}
+
+zip_access()
+{
+  da=$(date '+%Y-%m-%d %H:%M:%S')
+  echo "${da} begin to zip access.log">>$cut_log
+  zip "${dir_log}/access_${m_date}.zip" "${dir_log}/access.log"
+  da=$(date '+%Y-%m-%d %H:%M:%S')
+  echo "${da} zip access.log over!">>$cut_log
+}
+
+zip_error()
+{
+  da=$(date '+%Y-%m-%d %H:%M:%S')
+  echo "${da} begin to zip error.log">>$cut_log
+  zip "${dir_log}/error_${m_date}.zip" "${dir_log}/error.log"
+  da=$(date '+%Y-%m-%d %H:%M:%S')
+  echo "${da} zip error.log over!">>$cut_log
+}
+
+del_log()
+{
+  da=$(date '+%Y-%m-%d %H:%M:%S')
+  echo "${da} begin to delete imicang | access | error log!">>$cut_log
+  rm -rf "${dir_log}/imicang.100baojia.com.log"
+  rm -rf "${dir_log}/access.log"
+  rm -rf "${dir_log}/error.log"
+  da=$(date '+%Y-%m-%d %H:%M:%S')
+  echo "${da} delete the logs over!">>$cut_log
+}
+
+cut_log()
+{
+  da=$(date '+%Y-%m-%d %H:%M:%S')
+  echo "${da} begin to cut off the logs!">>$cut_log
+  kill -USR1 ${pid}
+  da=$(date '+%Y-%m-%d %H:%M:%S')
+  echo "${da} cut off the logs over!">>$cut_log
+}
+
+del_old()
+{
+  da=$(date '+%Y-%m-%d %H:%M:%S')
+  echo "${da} begin to delete the log_back_zips in ${dir_log}" more than 3 days...>>$cut_log
+  find ${dir_log} -name "*.zip" -mtime +3 -exec rm -rf {} \;
+}
+
+zip_imcang
+zip_access
+zip_error
+del_log
+cut_log
+del_old
