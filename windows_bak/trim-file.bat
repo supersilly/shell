@@ -60,7 +60,7 @@ del "%%i"
 copy *.bat "%destdir%" /y 
 
 @echo Trim Over
-@echo 等待一秒后自动关闭
+@echo will exit in 1s ...
 @ping 2.2.2 -w 480 -n 2 >nul
 explorer %destdir%
 exit
