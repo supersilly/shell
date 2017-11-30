@@ -1134,6 +1134,7 @@ echo "asdfas12uso7d8fdfds8898sdfs" | tr -d '0-9'
 
 生成一个空的100k的data.file的文件
 dd if=/dev/zero bs=100k count=1 of=data.file
+dd if=/dev/zero of=/home/swap bs=1G count=2
 
 按照内容拆分日志
 csplit server.log /Server/ -n 2 -s {*} -f server -b "%2d.log"; rm server00.log
@@ -1149,6 +1150,7 @@ echo ${url%.*}  移除最右边 最小限度的.* 匹配的内容   输出www.google
 echo ${url%%.*}  移除最右边 最大限度的.* 匹配的内容  输出www
 echo ${url#*.}  移除最左边 最小限度的.* 匹配的内容   输出google.com
 echo ${url##*.}  移除最左边 最大限度的.* 匹配的内容  输出com
+字符串长度  echo ${#string}
 
 curl -s "http://ip138.com/ips138.asp?ip=117.114.151.183&action=2"| iconv -f gb2312 -t utf-8
 iconv 中  -f  from   -t   to   -c  ignore

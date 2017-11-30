@@ -9,7 +9,7 @@ echo $da" listening ..." >> $log
 function net_check {
   da=$(date '+%Y-%m-%d %H:%M:%S')
   echo ${da}" check net status" >> $log
-  get_va=$(curl ${web} | grep 'languagechange(e1)')
+  get_va=$(curl --connect-timeout 1 -m 1 ${web} | grep 'languagechange(e1)')
   if [[ $get_va =~ "languagechange" ]]; then
     da=$(date '+%Y-%m-%d %H:%M:%S')
     echo ${da}" net status is OK!" >> $log
