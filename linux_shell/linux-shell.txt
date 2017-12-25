@@ -876,8 +876,11 @@ tar -cvf tm_bk.tar tomcat/* --exclude=tomcat/appbak --exclude=tomcat/logs
 
 
 ²é¿´ linux°æ±¾
+all linux version
 
 cat /etc/issue
+lsb_release -a
+
 
 cat /etc/redhat-release
 
